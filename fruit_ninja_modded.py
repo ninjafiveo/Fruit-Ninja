@@ -8,9 +8,9 @@ img_folder = 'images\\' #! Folder you want to store your images... for the relat
 dirname = os.path.dirname(__file__)+'\\'
 img_dir_path = os.path.join(dirname, img_folder)
 file_path = r''+img_dir_path
-print(img_folder)
-print(dirname)
-print(file_path)
+# print(img_folder)
+# print(dirname)
+# print(file_path)
 
 
 
@@ -21,7 +21,7 @@ fruits = ['melon', 'orange', 'pomegranate', 'guava', 'bomb']    #entities in the
 #! initialize pygame and create window
 WIDTH = 1600
 HEIGHT = 1000
-FPS = 18                                                 #controls how often the gameDisplay should refresh. In our case, it will refresh every 1/12th second
+FPS = 30                                                 #controls how often the gameDisplay should refresh. In our case, it will refresh every 1/12th second
 
 pygame.init()
 pygame.display.set_caption('Fruit-Ninja Game -- DataFlair')
@@ -34,11 +34,13 @@ BLACK = (0,0,0)
 RED = (255,0,0)
 GREEN = (0,255,0)
 BLUE = (0,0,255)
+GREEN2 = (66, 186, 45)
+PINK = (255, 0, 212)
 
 #? Change - added dirname
 background = pygame.image.load(dirname+'back.jpg')                                  #game background
-font = pygame.font.Font(os.path.join(os.getcwd(), dirname+'comic.ttf'), 42)
-score_text = font.render('Score : ' + str(score), True, (255, 255, 255))    #score display
+font = pygame.font.Font(os.path.join(os.getcwd(), dirname+'font.ttf'), 80)
+score_text = font.render('Score : ' + str(score), True, (GREEN))    #score display
 lives_icon = pygame.image.load(dirname+'images/white_lives.png')                    #images that shows remaining lives
 
 #! Generalized structure of the fruit Dictionary
@@ -46,10 +48,10 @@ def generate_random_fruits(fruit):
     fruit_path = "images/" + fruit + ".png"
     data[fruit] = {
         'img': pygame.image.load(dirname+fruit_path),
-        'x' : random.randint(100,500),          #where the fruit should be positioned on x-coordinate
-        'y' : 860,
-        'speed_x': random.randint(-20,20),      #how fast the fruit should move in x direction. Controls the diagonal movement of fruits
-        'speed_y': random.randint(-80, -60),    #control the speed of fruits in y-directionn ( UP )
+        'x' : random.randint(100,1500),          #where the fruit should be positioned on x-coordinate
+        'y' : 870,
+        'speed_x': random.randint(-30,30),      #how fast the fruit should move in x direction. Controls the diagonal movement of fruits
+        'speed_y': random.randint(-100, 0),    #control the speed of fruits in y-directionn ( UP )
         'throw': False,                         #determines if the generated coordinate of the fruits is outside the gameDisplay or not. If outside, then it will be discarded
         't': 0,                                 #manages the
         'hit': False,
@@ -69,10 +71,10 @@ def hide_cross_lives(x, y):
     gameDisplay.blit(pygame.image.load(dirname+"images/red_lives.png"), (x, y))
 
 #! Generic method to draw fonts on the screen
-font_name = pygame.font.match_font('comic.ttf')
+font_name = pygame.font.match_font('font.ttf')
 def draw_text(display, text, size, x, y):
     font = pygame.font.Font(font_name, size)
-    text_surface = font.render(text, True, WHITE)
+    text_surface = font.render(text, True, GREEN)
     text_rect = text_surface.get_rect()
     text_rect.midtop = (x, y)
     gameDisplay.blit(text_surface, text_rect)
@@ -93,7 +95,7 @@ def show_gameover_screen():
     if not game_over :
         draw_text(gameDisplay,"Score : " + str(score), 50, WIDTH / 2, HEIGHT /2)
 
-    draw_text(gameDisplay, "Press a key to begin!", 64, WIDTH / 2, HEIGHT * 3 / 4)
+    draw_text(gameDisplay, "Press a key to begin!", 70, WIDTH / 2, HEIGHT * 3 / 4)
     pygame.display.flip()
     waiting = True
     while waiting:
@@ -131,10 +133,10 @@ while game_running :
         if value['throw']:
             value['x'] += value['speed_x']          #moving the fruits in x-coordinates
             value['y'] += value['speed_y']          #moving the fruits in y-coordinate
-            value['speed_y'] += (1 * value['t'])    #increasing y-corrdinate
+            value['speed_y'] += (1 * value['t'])    #increasing y-coordinate
             value['t'] += 1                         #increasing speed_y for next loop
 
-            if value['y'] <= 800:
+            if value['y'] <= 1000:
                 gameDisplay.blit(value['img'], (value['x'], value['y']))    #displaying the fruit inside screen dynamically
             else:
                 generate_random_fruits(key)
@@ -162,16 +164,16 @@ while game_running :
                     half_fruit_path = dirname+"images/" + "half_" + key + ".png"
 
                 value['img'] = pygame.image.load(half_fruit_path)
-                value['speed_x'] += 10
+                value['speed_x'] += 40
                 if key != 'bomb' :
                     score += 1
-                score_text = font.render('Score : ' + str(score), True, (255, 255, 255))
+                score_text = font.render('Score : ' + str(score), True, (GREEN))
                 value['hit'] = True
         else:
             generate_random_fruits(key)
 
     pygame.display.update()
-    clock.tick(FPS)      # keep loop running at the right speed (manages the frame/second. The loop should update afer every 1/12th pf the sec
+    clock.tick(FPS/1.8)      # keep loop running at the right speed (manages the frame/second. The loop should update afer every 1/12th pf the sec
                         
 
 pygame.quit()
