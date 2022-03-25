@@ -12,7 +12,7 @@ file_path = r''+img_dir_path
 # print(dirname)
 # print(file_path)
 
-
+####
 
 player_lives = 4                                                #keep track of lives
 score = 0                                                       #keeps track of score
